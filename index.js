@@ -111,4 +111,57 @@ app.get("/mentors", async (req, res) => {
 })
 
 
+// endpoint for assigning students to a mentor 
+app.post("/assign_students", async (req, res) => {
+    const data = req.body;
+    // updating the students array to the mentor in mentors collection 
+    const result = await client
+        .db("mentor-student")
+        .collection("mentors")
+        .updateOne({ mentor_name: data.mentor_name },
+            { $set: { assigned_students: data.assigned_students } }
+        )
+    // looping over the students array to updated the mentor detaisl in the students in students collection
+    data.assigned_students.map(async (student) => {
+        await client
+            .db("mentor-student")
+            .collection("students")
+            .updateOne({ student_name: student },
+                { $set: { "mentor_name": data.mentor_name, "mentor_assigned": true } }
+            )
+    })
+    // sending the respose message 
+    result.acknowledged
+        ? res.send({ msg: "Mentor assigned" })
+        : res.send({ msg: "something went wrong! please try again" })
+})
 
+// endpoint to change the  assigned mentor of a student
+
+app.post("/change_mentor", async (req, res) => {
+    const data = req.body;
+
+    const result = await client
+        .db("mentor-student")
+        .collection("mentors")
+        .updateOne({ mentor_name: data.mentor_name },
+            { $pull: { assigned_students: data.student_name } }
+        )
+
+    await client
+        .db("mentor-student")
+        .collection("students")
+        .updateOne({ student_name: data.student_name },
+            { $set: { mentor_name: data.new_mentor_name } }
+        )
+
+    await client
+        .db("mentor-student")
+        .collection("mentors")
+        .updateOne({ mentor_name: data.new_mentor_name },
+            { $push: { "assigned_students": data.student_name } }
+        )
+    result.acknowledged
+        ? res.send({ msg: "mentor changed" })
+        : res.send({ msg: "failed to change the mentor!!! please try again" })
+})

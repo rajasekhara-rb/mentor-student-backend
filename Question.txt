@@ -1,0 +1,27 @@
+Mentor and Student Assigning with Database
+ 
+TASK:
+Write API to create Mentor
+Write API to create Student
+Write API to Assign a student to Mentor
+❏ 	Select one mentor and Add multiple Student
+❏ 	A student who has a mentor should not be shown in List
+Write API to Assign or Change Mentor for particular Student
+❏ 	Select One Student and Assign one Mentor
+Write API to show all students for a particular mentor 
+TASK DETAILS:
+How to write an API?
+●  	Create an Express server.
+●  	Create an endpoint and write your logic.
+●  	Use the API in the front-end for sending data and receiving data to/from the server.
+ 
+2. Any specifications and constraints?
+Back-End: Node Js
+Database: MongoDB
+
+	Push all your work files to your Github(https://github.com/)
+	Deploy it to render 
+  	https://github.com/username/assign-mentor
+
+Note:Share your task with Github and Render url at  below mail id:
+mastercoding67@gmail.com
